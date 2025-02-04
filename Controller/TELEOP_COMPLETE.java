@@ -14,7 +14,7 @@ public class TELEOP_COMPLETE extends LinearOpMode {
 	private DcMotor leftFront;
 	private DcMotor leftBack;
 	private DcMotor arm;
-	private DcMotor chain;
+	private DcMotor secondaryArm;
 	private DcMotor leftSlider;
 	private DcMotor rightSlider;
 
@@ -23,13 +23,13 @@ public class TELEOP_COMPLETE extends LinearOpMode {
 	public void runOpMode() {
 		// Initialize hardware
 		arm = hardwareMap.get(DcMotor.class, "arm");
-		chain = hardwareMap.get(DcMotor.class, "chain");
+		secondaryArm = hardwareMap.get(DcMotor.class, "secondaryArm");
 		rightSlider = hardwareMap.get(DcMotor.class, "rightSlider");
 		leftSlider = hardwareMap.get(DcMotor.class, "leftSlider");
 
 		// Set motor directions if necessary
 		arm.setDirection(DcMotor.Direction.FORWARD);
-		chain.setDirection(DcMotor.Direction.FORWARD);
+		secondaryArm.setDirection(DcMotor.Direction.FORWARD);
 		rightSlider.setDirection(DcMotor.Direction.FORWARD);
 		leftSlider.setDirection(DcMotor.Direction.REVERSE);
 		
@@ -56,23 +56,23 @@ public class TELEOP_COMPLETE extends LinearOpMode {
 
 		while (opModeIsActive()) {
 			float clawMainPower = gamepad1.left_trigger - gamepad1.right_trigger;
-			float clawChainPower = 0;
+			float secondaryClawPower = 0;
 			float sliderPower = 0;
 
 			// Control chain motor with bumpers
 			if (gamepad1.left_bumper) {
-				clawChainPower = 0.2f;
+				secondaryClawPower = 0.2f;
 			} else if (gamepad1.right_bumper) {
-				clawChainPower = -0.2f;
+				secondaryClawPower = -0.2f;
 			} else {
-				clawChainPower = 0;
+				secondaryClawPower = 0;
 			}
 
 
 			if (gamepad1.dpad_down) {
-				sliderPower = 0.2f;
+				sliderPower = -0.4f;
 			} else if (gamepad1.dpad_up) {
-				sliderPower = -0.2f;
+				sliderPower = 0.8f;
 			} else {
 				sliderPower = 0;
 			}
@@ -98,11 +98,11 @@ public class TELEOP_COMPLETE extends LinearOpMode {
 			rightFrontPower += -(gamepad1.right_stick_x+gamepad2.right_stick_x)*1.5*speed;
 			rightBackPower += -(gamepad1.right_stick_x+gamepad2.right_stick_x)*1.5*speed;
 			leftFrontPower += (gamepad1.right_stick_x+gamepad2.right_stick_x)*1.5*speed;
-			leftBackPower += (gamepad1.right_stick_x+gamepad2.right_stick_x)*1*speed;
+			leftBackPower += (gamepad1.right_stick_x+gamepad2.right_stick_x)*1.5*speed;
 
 			// Set motor powers
 			arm.setPower(clawMainPower);
-			chain.setPower(clawChainPower);
+			secondaryArm.setPower(secondaryClawPower);
 			
 			leftSlider.setPower(sliderPower);
 			rightSlider.setPower(sliderPower);
@@ -114,10 +114,9 @@ public class TELEOP_COMPLETE extends LinearOpMode {
 
 			// Add telemetry for debugging
 			telemetry.addData("Arm Power", clawMainPower);
-			telemetry.addData("Chain Power", clawChainPower);
+			telemetry.addData("Secondary Arm Power", secondaryClawPower);
 			telemetry.update();
 		}
 	}
 }
 
-	
