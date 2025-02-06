@@ -15,7 +15,7 @@ rightBack = hardwareMap.get(DcMotorEx.class,"rightBack");
 leftFront = hardwareMap.get(DcMotorEx.class,"leftFront");
 leftBack = hardwareMap.get(DcMotorEx.class,"leftBack");
 
-public void startMotors() {
+public void startAll() {
   
   if (opModeIsActive()) {
     rightFront.setPower(1);
@@ -25,7 +25,7 @@ public void startMotors() {
   }
 }
 
-public void backMotors() {
+public void backAll() {
   
   if (opModeIsActive()) {
     rightFront.setPower(-1);
@@ -50,7 +50,7 @@ public void startRight() {
   }
 }
 
-public void stopMotors() {
+public void stopAll() {
   
   if (opModeIsActive()) {
     rightFront.setPower(0);
@@ -63,6 +63,6 @@ public void stopMotors() {
 @TeleOp(name = "AUTO_COMPLETE")
 public class AUTO_COMPLETE extends LinearOpMode {
 
-  startMotors();
+  startAll();
   
 }
