@@ -62,6 +62,25 @@ public void stopAll() {
   }
 }
 
+
+public void startFront() {
+  
+  if (opModeIsActive()) {
+    rightFront.setPower(1);
+    leftFront.setPower(-1);
+
+  }
+}
+
+
+public void startBack() {
+  
+  if (opModeIsActive()) {
+    rightBack.setPower(1);
+    leftBack.setPower(-1);
+  }
+}
+
 @TeleOp(name = "AUTO_COMPLETE")
 public class AUTO_COMPLETE extends LinearOpMode {
 
