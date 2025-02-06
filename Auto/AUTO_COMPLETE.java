@@ -10,7 +10,10 @@ private DcMotor rightBack;
 private DcMotor leftFront;
 private DcMotor leftBack;
 
-
+rightFront = hardwareMap.get(DcMotorEx.class, "rightFront");
+rightBack = hardwareMap.get(DcMotorEx.class,"rightBack");
+leftFront = hardwareMap.get(DcMotorEx.class,"leftFront");
+leftBack = hardwareMap.get(DcMotorEx.class,"leftBack");
 
 public void startMotors() {
   
