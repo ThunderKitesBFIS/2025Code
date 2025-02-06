@@ -35,6 +35,21 @@ public void backMotors() {
   }
 }
 
+
+public void startLeft() {
+  
+  if (opModeIsActive()) {
+    rightFront.setPower(1);
+  }
+}
+
+public void startRight() {
+  
+  if (opModeIsActive()) {
+    leftFront.setPower(1);
+  }
+}
+
 public void stopMotors() {
   
   if (opModeIsActive()) {
