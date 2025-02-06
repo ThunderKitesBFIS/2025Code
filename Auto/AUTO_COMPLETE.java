@@ -5,10 +5,12 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
-	private DcMotor rightFront;
-	private DcMotor rightBack;
-	private DcMotor leftFront;
-	private DcMotor leftBack;
+private DcMotor rightFront;
+private DcMotor rightBack;
+private DcMotor leftFront;
+private DcMotor leftBack;
+
+
 
 public void startMotors() {
   
