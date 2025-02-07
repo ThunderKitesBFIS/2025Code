@@ -1,89 +1,76 @@
-// This might not work
-
 package org.firstinspires.ftc.teamcode;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
-private DcMotor rightFront;
-private DcMotor rightBack;
-private DcMotor leftFront;
-private DcMotor leftBack;
 
-rightFront = hardwareMap.get(DcMotorEx.class, "rightFront");
-rightBack = hardwareMap.get(DcMotorEx.class,"rightBack");
-leftFront = hardwareMap.get(DcMotorEx.class,"leftFront");
-leftBack = hardwareMap.get(DcMotorEx.class,"leftBack");
+public class Movement {
 
-public void startAll() {
-  
-  if (opModeIsActive()) {
+  private DcMotor rightFront;
+  private DcMotor rightBack;
+  private DcMotor leftFront;
+  private DcMotor leftBack;
+
+  public Movement(HardwareMap hardwareMap) {
+    rightFront = hardwareMap.get(DcMotor.class, "rightFront");
+    rightBack = hardwareMap.get(DcMotor.class, "rightBack");
+    leftFront = hardwareMap.get(DcMotor.class, "leftFront");
+    leftBack = hardwareMap.get(DcMotor.class, "leftBack");
+
+        // Optional: Set motor directions if needed
+    rightFront.setDirection(DcMotor.Direction.FORWARD);
+    rightBack.setDirection(DcMotor.Direction.FORWARD);
+    leftFront.setDirection(DcMotor.Direction.REVERSE);
+    leftBack.setDirection(DcMotor.Direction.REVERSE);
+  }
+
+  public void startAll() {
     rightFront.setPower(1);
     leftFront.setPower(-1);
     rightBack.setPower(1);
     leftBack.setPower(-1);
   }
-}
-
-public void backAll() {
   
-  if (opModeIsActive()) {
+  public void backAll() {
+    
     rightFront.setPower(-1);
     leftFront.setPower(1);
     rightBack.setPower(-1);
     leftBack.setPower(1);
   }
-}
-
-
-public void startLeft() {
   
-  if (opModeIsActive()) {
+  
+  public void startLeft() {
+
     rightFront.setPower(1);
   }
-}
-
-public void startRight() {
   
-  if (opModeIsActive()) {
+  public void startRight() {
+    
     leftFront.setPower(1);
   }
-}
-
-public void stopAll() {
   
-  if (opModeIsActive()) {
+  public void stopAll() {
+  
     rightFront.setPower(0);
     leftFront.setPower(0);
     rightBack.setPower(0);
     leftBack.setPower(0);
+    
   }
-}
-
-
-public void startFront() {
   
-  if (opModeIsActive()) {
+  
+  public void startFront() {
+    
     rightFront.setPower(1);
     leftFront.setPower(-1);
-
   }
-}
 
 
-public void startBack() {
-  
-  if (opModeIsActive()) {
+  public void startBack() {
+    
     rightBack.setPower(1);
     leftBack.setPower(-1);
   }
-}
 
-@TeleOp(name = "AUTO_COMPLETE")
-public class AUTO_COMPLETE extends LinearOpMode {
-
-  startAll();
-  
 }
