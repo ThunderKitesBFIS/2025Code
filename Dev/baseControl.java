@@ -80,7 +80,6 @@ double rightFrontPower = 0;
 double rightBackPower = 0;
 double leftFrontPower = 0;
 double leftBackPower = 0;
-double leftBackPower = 0;
 
 // Forward and backward movement
 rightFrontPower += (gamepad1.left_stick_y + gamepad2.left_stick_y) * speed;
