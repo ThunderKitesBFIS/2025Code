@@ -51,7 +51,6 @@ public class Movement {
     leftBack.setPower(1);
   }
   
-  
   public void startLeft() {
 
     rightFront.setPower(1);
