@@ -15,6 +15,7 @@ private DcMotor rightFront;
 private DcMotor rightBack;
 private DcMotor leftFront;
 private DcMotor leftBack;
+private Servo claw;
 //private DcMotor arm;
 //private Servo secondaryArm;
 //private DcMotor leftSlider;
@@ -25,6 +26,8 @@ private DcMotor leftBack;
 // Define speed variable
 double speed = 0.65;
 
+double clawPower = 0;
+  
 @Override
 public void runOpMode() {
 // Initialize motors and servos from hardware map
@@ -44,12 +47,13 @@ public void runOpMode() {
 // Set zero power behavior to brake to prevent unwanted motion
 //rightSlider.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 //leftSlider.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
+  
 // Initialize drive motors
 rightFront = hardwareMap.get(DcMotor.class, "rightFront");
 rightBack = hardwareMap.get(DcMotor.class, "rightBack");
 leftFront = hardwareMap.get(DcMotor.class, "leftFront");
 leftBack = hardwareMap.get(DcMotor.class, "leftBack");
+claw = hardwareMap.get(Servo.class, "claw");
 
 // Set zero power behavior for drive motors
 rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -80,8 +84,8 @@ double rightFrontPower = 0;
 double rightBackPower = 0;
 double leftFrontPower = 0;
 double leftBackPower = 0;
-
 // Forward and backward movement
+
 rightFrontPower += (gamepad1.left_stick_y + gamepad2.left_stick_y) * speed;
 rightBackPower += (gamepad1.left_stick_y + gamepad2.left_stick_y) * speed;
 leftFrontPower += (gamepad1.left_stick_y + gamepad2.left_stick_y) * speed;
@@ -93,6 +97,10 @@ rightBackPower -= (gamepad1.left_stick_x + gamepad2.left_stick_x) * speed;
 leftFrontPower -= (gamepad1.left_stick_x + gamepad2.left_stick_x) * speed;
 leftBackPower += (gamepad1.left_stick_x + gamepad2.left_stick_x) * speed;
 
+if (gamepad.x) {
+  clawPower = 1.0
+}
+
 // Rotation (turning)
 rightFrontPower += (gamepad1.right_stick_x + gamepad2.right_stick_x) * 1.5 * speed;
 rightBackPower += (gamepad1.right_stick_x + gamepad2.right_stick_x) * 1.5 * speed;
@@ -103,12 +111,9 @@ rightFront.setPower(rightFrontPower);
 rightBack.setPower(rightBackPower);
 leftFront.setPower(leftFrontPower);
 leftBack.setPower(leftBackPower);
+claw.setPosition(clawPower);
 
 // Prevent CPU overuse
-idle();
-}
-}
-}
 
 --
 Naoki Hashimoto
