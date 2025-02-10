@@ -16,7 +16,7 @@ public class TELEOP_COMPLETE extends LinearOpMode {
     private DcMotor leftFront;
     private DcMotor leftBack;
     private DcMotor arm;
-    private Servo secondaryArm;
+    private DcMotor secondaryArm;
     private DcMotor leftSlider;
     private DcMotor rightSlider;
     private Servo clawServo;
