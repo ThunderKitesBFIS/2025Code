@@ -98,7 +98,7 @@ leftFrontPower -= (gamepad1.left_stick_x + gamepad2.left_stick_x) * speed;
 leftBackPower += (gamepad1.left_stick_x + gamepad2.left_stick_x) * speed;
 
 if (gamepad.x) {
-  claw.setPosition(1.0);
+  claw.setPosition(1);
 }
 
 else if (not gamepad.x) {
