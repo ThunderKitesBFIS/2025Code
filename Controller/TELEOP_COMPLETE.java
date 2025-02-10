@@ -33,7 +33,7 @@ public class TELEOP_COMPLETE extends LinearOpMode {
         rightSlider = hardwareMap.get(DcMotor.class, "rightSlider");
         leftSlider = hardwareMap.get(DcMotor.class, "leftSlider");
         clawServo = hardwareMap.get(Servo.class, "clawClaw");
-        bucket = hardwareMap.get(servo.class, "bucket");
+        bucket = hardwareMap.get(Servo.class, "bucket");
 
         // Set motor directions
         arm.setDirection(DcMotor.Direction.FORWARD);
