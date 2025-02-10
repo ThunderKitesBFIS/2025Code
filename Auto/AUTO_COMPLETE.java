@@ -36,11 +36,11 @@ public class Movement {
   }
 
   public void startClaw() {
-    claw.setPosition(claw.Position+0.1);
+    claw.setPosition(1.0;
   }
 
   public void backClaw() {
-    claw.setPosition(claw.Position-0.1);
+    claw.setPosition(0.0);
   }
   
   public void backAll() {
