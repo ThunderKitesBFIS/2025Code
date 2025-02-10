@@ -1,4 +1,3 @@
-
 package org.firstinspires.ftc.teamcode;
 
 // Import necessary FTC libraries
@@ -17,12 +16,11 @@ public class TELEOP_COMPLETE extends LinearOpMode {
     private DcMotor leftFront;
     private DcMotor leftBack;
     private DcMotor arm;
-    private DcMotor secondaryArm;
+    private Servo secondaryArm;
     private DcMotor leftSlider;
     private DcMotor rightSlider;
     private Servo clawServo;
     private Servo bucket;
-    private Servo clawClaw;
 
     // Define speed variable
     double speed = 1;
@@ -35,7 +33,7 @@ public class TELEOP_COMPLETE extends LinearOpMode {
         rightSlider = hardwareMap.get(DcMotor.class, "rightSlider");
         leftSlider = hardwareMap.get(DcMotor.class, "leftSlider");
         clawServo = hardwareMap.get(Servo.class, "clawClaw");
-        bucket = hardwareMap.get(Servo.class, "bucket");
+        bucket = hardwareMap.get(servo.class, "bucket");
 
         // Set motor directions
         arm.setDirection(DcMotor.Direction.FORWARD);
@@ -141,7 +139,7 @@ public class TELEOP_COMPLETE extends LinearOpMode {
 
             // Set motor and servo powers
             arm.setPower(clawMainPower);
-            secondaryArm.setPower(secondaryArmPosition);
+            secondaryArm.setPosition(secondaryArmPosition);
             clawServo.setPosition(clawServoPosition);
             bucket.setPosition(bucketposition);
             leftSlider.setPower(sliderPower);
