@@ -10,18 +10,22 @@ public class Movement {
   private DcMotor rightBack;
   private DcMotor leftFront;
   private DcMotor leftBack;
+  private Servo claw;
 
   public Movement(HardwareMap hardwareMap) {
+    
     rightFront = hardwareMap.get(DcMotor.class, "rightFront");
     rightBack = hardwareMap.get(DcMotor.class, "rightBack");
     leftFront = hardwareMap.get(DcMotor.class, "leftFront");
     leftBack = hardwareMap.get(DcMotor.class, "leftBack");
+    claw = hardwareMap.get(Servo.class, "claw");
 
         // Optional: Set motor directions if needed
     rightFront.setDirection(DcMotor.Direction.FORWARD);
     rightBack.setDirection(DcMotor.Direction.FORWARD);
     leftFront.setDirection(DcMotor.Direction.REVERSE);
     leftBack.setDirection(DcMotor.Direction.REVERSE);
+    claw.setDirection(DcMotor.Direction.FORWARD);
   }
 
   public void startAll() {
@@ -29,6 +33,14 @@ public class Movement {
     leftFront.setPower(-1);
     rightBack.setPower(1);
     leftBack.setPower(-1);
+  }
+
+  public void startClaw() {
+    claw.setPosition(claw.Position+0.1);
+  }
+
+  public void backClaw() {
+    claw.setPosition(claw.Position-0.1);
   }
   
   public void backAll() {
