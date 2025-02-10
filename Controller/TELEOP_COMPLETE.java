@@ -22,6 +22,7 @@ public class TELEOP_COMPLETE extends LinearOpMode {
     private DcMotor rightSlider;
     private Servo clawServo;
     private Servo bucket;
+    private Servo clawClaw;
 
     // Define speed variable
     double speed = 1;
