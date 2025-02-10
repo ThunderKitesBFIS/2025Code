@@ -1,3 +1,4 @@
+
 package org.firstinspires.ftc.teamcode;
 
 // Import necessary FTC libraries
@@ -29,7 +30,7 @@ public class TELEOP_COMPLETE extends LinearOpMode {
     public void runOpMode() {
         // Initialize motors and servos from hardware map
         arm = hardwareMap.get(DcMotor.class, "arm");
-        secondaryArm = hardwareMap.get(Servo.class, "secondaryArm");
+        secondaryArm = hardwareMap.get(DcMotor.class, "secondaryArm");
         rightSlider = hardwareMap.get(DcMotor.class, "rightSlider");
         leftSlider = hardwareMap.get(DcMotor.class, "leftSlider");
         clawServo = hardwareMap.get(Servo.class, "clawClaw");
@@ -139,7 +140,7 @@ public class TELEOP_COMPLETE extends LinearOpMode {
 
             // Set motor and servo powers
             arm.setPower(clawMainPower);
-            secondaryArm.setPosition(secondaryArmPosition);
+            secondaryArm.setPower(secondaryArmPosition);
             clawServo.setPosition(clawServoPosition);
             bucket.setPosition(bucketposition);
             leftSlider.setPower(sliderPower);
