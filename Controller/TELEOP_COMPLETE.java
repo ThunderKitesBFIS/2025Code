@@ -31,7 +31,7 @@ public class TELEOP_COMPLETE extends LinearOpMode {
     public void runOpMode() {
         // Initialize motors and servos from hardware map
         arm = hardwareMap.get(DcMotor.class, "arm");
-        secondaryArm = hardwareMap.get(DcMotor.class, "secondaryArm");
+        secondaryArm = hardwareMap.get(Servo.class, "secondaryArm");
         rightSlider = hardwareMap.get(DcMotor.class, "rightSlider");
         leftSlider = hardwareMap.get(DcMotor.class, "leftSlider");
         clawServo = hardwareMap.get(Servo.class, "clawClaw");
