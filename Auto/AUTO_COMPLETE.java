@@ -36,7 +36,7 @@ public class Movement {
   }
 
   public void startClaw() {
-    claw.setPosition(1.0;
+    claw.setPosition(1.0);
   }
 
   public void backClaw() {
