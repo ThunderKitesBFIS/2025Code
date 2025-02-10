@@ -98,7 +98,7 @@ leftFrontPower -= (gamepad1.left_stick_x + gamepad2.left_stick_x) * speed;
 leftBackPower += (gamepad1.left_stick_x + gamepad2.left_stick_x) * speed;
 
 if (gamepad.x) {
-  clawPower = 1.0
+  claw.setPosition(clawPower);
 }
 
 // Rotation (turning)
@@ -111,8 +111,6 @@ rightFront.setPower(rightFrontPower);
 rightBack.setPower(rightBackPower);
 leftFront.setPower(leftFrontPower);
 leftBack.setPower(leftBackPower);
-claw.setPosition(clawPower);
-
 // Prevent CPU overuse
 
 --
