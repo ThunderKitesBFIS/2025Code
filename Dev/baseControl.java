@@ -58,10 +58,10 @@ leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
 // Set motor directions for drivetrain
-rightFront.setDirection(DcMotor.Direction.REVERSE);
-rightBack.setDirection(DcMotor.Direction.REVERSE);
-leftFront.setDirection(DcMotor.Direction.REVERSE);
-leftBack.setDirection(DcMotor.Direction.REVERSE);
+rightFront.setDirection(DcMotor.Direction.FORWARD);
+rightBack.setDirection(DcMotor.Direction.FORWARD);
+leftFront.setDirection(DcMotor.Direction.FORWARD);
+leftBack.setDirection(DcMotor.Direction.FORWARD);
 
 // Wait for the start command from the driver
 waitForStart();
@@ -80,24 +80,25 @@ double rightFrontPower = 0;
 double rightBackPower = 0;
 double leftFrontPower = 0;
 double leftBackPower = 0;
+double leftBackPower = 0;
 
 // Forward and backward movement
-rightFrontPower += -(gamepad1.left_stick_y + gamepad2.left_stick_y) * speed;
-rightBackPower += -(gamepad1.left_stick_y + gamepad2.left_stick_y) * speed;
-leftFrontPower += -(gamepad1.left_stick_y + gamepad2.left_stick_y) * speed;
-leftBackPower += -(gamepad1.left_stick_y + gamepad2.left_stick_y) * speed;
+rightFrontPower += (gamepad1.left_stick_y + gamepad2.left_stick_y) * speed;
+rightBackPower += (gamepad1.left_stick_y + gamepad2.left_stick_y) * speed;
+leftFrontPower += (gamepad1.left_stick_y + gamepad2.left_stick_y) * speed;
+leftBackPower += (gamepad1.left_stick_y + gamepad2.left_stick_y) * speed;
 
 // Strafe movement (sideways motion)
-rightFrontPower += -(gamepad1.left_stick_x + gamepad2.left_stick_x) * speed;
-rightBackPower += (gamepad1.left_stick_x + gamepad2.left_stick_x) * speed;
-leftFrontPower += (gamepad1.left_stick_x + gamepad2.left_stick_x) * speed;
-leftBackPower += -(gamepad1.left_stick_x + gamepad2.left_stick_x) * speed;
+rightFrontPower += (gamepad1.left_stick_x + gamepad2.left_stick_x) * speed;
+rightBackPower -= (gamepad1.left_stick_x + gamepad2.left_stick_x) * speed;
+leftFrontPower -= (gamepad1.left_stick_x + gamepad2.left_stick_x) * speed;
+leftBackPower += (gamepad1.left_stick_x + gamepad2.left_stick_x) * speed;
 
 // Rotation (turning)
-rightFrontPower += -(gamepad1.right_stick_x + gamepad2.right_stick_x) * 1.5 * speed;
-rightBackPower += -(gamepad1.right_stick_x + gamepad2.right_stick_x) * 1.5 * speed;
-leftFrontPower += (gamepad1.right_stick_x + gamepad2.right_stick_x) * 1.5 * speed;
-leftBackPower += (gamepad1.right_stick_x + gamepad2.right_stick_x) * 1.5 * speed;
+rightFrontPower += (gamepad1.right_stick_x + gamepad2.right_stick_x) * 1.5 * speed;
+rightBackPower += (gamepad1.right_stick_x + gamepad2.right_stick_x) * 1.5 * speed;
+leftFrontPower -= (gamepad1.right_stick_x + gamepad2.right_stick_x) * 1.5 * speed;
+leftBackPower -= (gamepad1.right_stick_x + gamepad2.right_stick_x) * 1.5 * speed;
 
 rightFront.setPower(rightFrontPower);
 rightBack.setPower(rightBackPower);
@@ -117,3 +118,8 @@ HS Student Council President 2024-25
 MS / HS Math Club President 2023-25
 HS Robotics Club - Thunder Kites: Chief Engineer
 MS / HS Science & Engineering Club President 2023-25
+
+Can Ulas Unal
+Developer
+2025
+MS/HS Robotics Memeber
