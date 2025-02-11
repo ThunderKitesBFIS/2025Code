@@ -16,15 +16,16 @@ public class TELEOP_COMPLETE extends LinearOpMode {
 	private DcMotor leftFront;
 	private DcMotor leftBack;
 	private DcMotor arm;
-	private Servo secondaryArm1;
-	private Servo secondaryArm2;
+	private Servo secondaryRight;
+	private Servo secondaryLeft;
 	private DcMotor leftSlider;
 	private DcMotor rightSlider;
 	private Servo clawServo;
 	private Servo bucket;
 	
-	float secondaryArmPosition = 0;
+	double secondaryAngle = 0.5;
 	double clawServoPosition = 0.3;
+	double clawMainPower = 0.5;
 
 	// Define speed variable
 	double speed = 1;
@@ -33,8 +34,8 @@ public class TELEOP_COMPLETE extends LinearOpMode {
 	public void runOpMode() {
 		// Initialize motors and servos from hardware map
 		arm = hardwareMap.get(DcMotor.class, "arm");
-		secondaryArm1 = hardwareMap.get(Servo.class, "secondaryArm1");
-		secondaryArm2 = hardwareMap.get(Servo.class, "secondaryArm2");
+		secondaryRight = hardwareMap.get(Servo.class, "secondaryRight");
+		secondaryLeft = hardwareMap.get(Servo.class, "secondaryLeft");
 		rightSlider = hardwareMap.get(DcMotor.class, "rightSlider");
 		leftSlider = hardwareMap.get(DcMotor.class, "leftSlider");
 		clawServo = hardwareMap.get(Servo.class, "clawClaw");
@@ -64,30 +65,35 @@ public class TELEOP_COMPLETE extends LinearOpMode {
 
 
 		// Set motor directions for drivetrain
-		rightFront.setDirection(DcMotor.Direction.REVERSE);
-		rightBack.setDirection(DcMotor.Direction.REVERSE);
-		leftFront.setDirection(DcMotor.Direction.REVERSE);
-		leftBack.setDirection(DcMotor.Direction.REVERSE);
+		rightFront.setDirection(DcMotor.Direction.FORWARD);
+        rightBack.setDirection(DcMotor.Direction.FORWARD);
+        leftFront.setDirection(DcMotor.Direction.FORWARD);
+        leftBack.setDirection(DcMotor.Direction.REVERSE);   
 
 		// Wait for the start command from the driver
 		waitForStart();
 
 		while (opModeIsActive()) {
 			// Initialize control variables
-			float clawMainPower = gamepad1.left_trigger - gamepad1.right_trigger;
 			float sliderPower = 0;
 			double clawSpeed = 0.2;
 			double bucketposition = 0;
 
 			// Control secondary arm position with buttons
-			if (gamepad1.x) {
-				secondaryArmPosition = 0.2f;
-			} else if (gamepad1.b) {
-				secondaryArmPosition = 0.8f;
+			if (gamepad1.x && secondaryAngle < 1) {
+				secondaryAngle += 0.01;
+			} else if (gamepad1.b && secondaryAngle > 0) {
+				secondaryAngle -= 0.01;
 			}
 			// Ensure the position stays within valid range
-			secondaryArmPosition = Math.max(0, Math.min(1, secondaryArmPosition));
-
+			secondaryAngle = Math.max(0, Math.min(1, secondaryAngle));
+			
+			if (gamepad1.left_trigger > 0 || gamepad1.right_trigger > 0) {
+				clawMainPower = gamepad1.left_trigger - gamepad1.right_trigger;	
+			}
+			
+			
+			
 			// Control claw servo position with D-pad
 			if (gamepad1.dpad_left) {
 				clawServoPosition = 0.08;
@@ -128,31 +134,32 @@ public class TELEOP_COMPLETE extends LinearOpMode {
 			double leftBackPower = 0;
 
 			// Forward and backward movement
-			rightFrontPower += -(gamepad1.left_stick_y + gamepad2.left_stick_y) * speed;
-			rightBackPower += -(gamepad1.left_stick_y + gamepad2.left_stick_y) * speed;
-			leftFrontPower += -(gamepad1.left_stick_y + gamepad2.left_stick_y) * speed;
-			leftBackPower += -(gamepad1.left_stick_y + gamepad2.left_stick_y) * speed;
+			rightFrontPower += (gamepad1.left_stick_y + gamepad2.left_stick_y) * speed;
+            rightBackPower += (gamepad1.left_stick_y + gamepad2.left_stick_y) * speed;
+            leftFrontPower += (gamepad1.left_stick_y + gamepad2.left_stick_y) * speed;
+            leftBackPower += (gamepad1.left_stick_y + gamepad2.left_stick_y) * speed;
 
 			// Strafe movement (sideways motion)
-			rightFrontPower += -(gamepad1.left_stick_x + gamepad2.left_stick_x) * speed;
-			rightBackPower += (gamepad1.left_stick_x + gamepad2.left_stick_x) * speed;
-			leftFrontPower += (gamepad1.left_stick_x + gamepad2.left_stick_x) * speed;
-			leftBackPower += -(gamepad1.left_stick_x + gamepad2.left_stick_x) * speed;
+			rightFrontPower += (gamepad1.left_stick_x + gamepad2.left_stick_x) * speed;
+            rightBackPower -= (gamepad1.left_stick_x + gamepad2.left_stick_x) * speed;
+            leftFrontPower -= (gamepad1.left_stick_x + gamepad2.left_stick_x) * speed;
+            leftBackPower += (gamepad1.left_stick_x + gamepad2.left_stick_x) * speed;
 
 			// Rotation (turning)
-			rightFrontPower += -(gamepad1.right_stick_x + gamepad2.right_stick_x) * 1.5 * speed;
-			rightBackPower += -(gamepad1.right_stick_x + gamepad2.right_stick_x) * 1.5 * speed;
-			leftFrontPower += (gamepad1.right_stick_x + gamepad2.right_stick_x) * 1.5 * speed;
-			leftBackPower += (gamepad1.right_stick_x + gamepad2.right_stick_x) * 1.5 * speed;
+			rightFrontPower += (gamepad1.right_stick_x + gamepad2.right_stick_x) * 1.5 * speed;
+            rightBackPower += (gamepad1.right_stick_x + gamepad2.right_stick_x) * 1.5 * speed;
+            leftFrontPower -= (gamepad1.right_stick_x + gamepad2.right_stick_x) * 1.5 * speed;
+            leftBackPower -= (gamepad1.right_stick_x + gamepad2.right_stick_x) * 1.5 * speed;
 
 			// Set motor and servo powers
 			arm.setPower(clawMainPower);
-			secondaryArm1.setPosition(0.4);
-			secondaryArm2.setPosition(0.4);
+			secondaryRight.setPosition(secondaryAngle);
+			secondaryLeft.setPosition(1 - secondaryAngle);
 			clawServo.setPosition(clawServoPosition);
 			bucket.setPosition(bucketposition);
 			leftSlider.setPower(sliderPower);
 			rightSlider.setPower(sliderPower);
+            
 			rightFront.setPower(rightFrontPower);
 			rightBack.setPower(rightBackPower);
 			leftFront.setPower(leftFrontPower);
@@ -164,7 +171,8 @@ public class TELEOP_COMPLETE extends LinearOpMode {
 			telemetry.addData("Right Stick X", gamepad1.right_stick_x);
 			telemetry.addData("Claw Servo Position", clawServoPosition);
 			telemetry.addData("Arm Power", clawMainPower);
-			telemetry.addData("Secondary Arm Power", secondaryArmPosition);
+			telemetry.addData("Secondary Right Position", secondaryRight.getPosition());
+			telemetry.addData("Secondary Left Position", secondaryLeft.getPosition());
 			telemetry.update();
 		}
 	}
