@@ -10,7 +10,7 @@ public class Movement {
   private DcMotor rightBack;
   private DcMotor leftFront;
   private DcMotor leftBack;
-  private Servo claw;
+  private Servo clawServo;
 
   public Movement(HardwareMap hardwareMap) {
     
