@@ -10,156 +10,162 @@ import com.qualcomm.robotcore.hardware.Servo;
 // Define the TeleOp mode with a specific name
 @TeleOp(name = "TELEOP_COMPLETE")
 public class TELEOP_COMPLETE extends LinearOpMode {
-    // Declare motor and servo variables
-    private DcMotor rightFront;
-    private DcMotor rightBack;
-    private DcMotor leftFront;
-    private DcMotor leftBack;
-    private DcMotor arm;
-    private Servo secondaryArm;
-    private DcMotor leftSlider;
-    private DcMotor rightSlider;
-    private Servo clawServo;
-    private Servo bucket;
+	// Declare motor and servo variables
+	private DcMotor rightFront;
+	private DcMotor rightBack;
+	private DcMotor leftFront;
+	private DcMotor leftBack;
+	private DcMotor arm;
+	private Servo secondaryArm1;
+	private Servo secondaryArm2;
+	private DcMotor leftSlider;
+	private DcMotor rightSlider;
+	private Servo clawServo;
+	private Servo bucket;
+	
+	float secondaryArmPosition = 0;
+	double clawServoPosition = 0.3;
 
-    // Define speed variable
-    double speed = 1;
+	// Define speed variable
+	double speed = 1;
 
-    @Override
-    public void runOpMode() {
-        // Initialize motors and servos from hardware map
-        arm = hardwareMap.get(DcMotor.class, "arm");
-        secondaryArm = hardwareMap.get(Servo.class, "secondaryArm");
-        rightSlider = hardwareMap.get(DcMotor.class, "rightSlider");
-        leftSlider = hardwareMap.get(DcMotor.class, "leftSlider");
-        clawServo = hardwareMap.get(Servo.class, "clawClaw");
-        bucket = hardwareMap.get(Servo.class, "bucket");
+	@Override
+	public void runOpMode() {
+		// Initialize motors and servos from hardware map
+		arm = hardwareMap.get(DcMotor.class, "arm");
+		secondaryArm1 = hardwareMap.get(Servo.class, "secondaryArm1");
+		secondaryArm2 = hardwareMap.get(Servo.class, "secondaryArm2");
+		rightSlider = hardwareMap.get(DcMotor.class, "rightSlider");
+		leftSlider = hardwareMap.get(DcMotor.class, "leftSlider");
+		clawServo = hardwareMap.get(Servo.class, "clawClaw");
+		bucket = hardwareMap.get(Servo.class, "bucket");
 
-        // Set motor directions
-        arm.setDirection(DcMotor.Direction.FORWARD);
-        rightSlider.setDirection(DcMotor.Direction.FORWARD);
-        leftSlider.setDirection(DcMotor.Direction.REVERSE);
+		// Set motor directions
+		arm.setDirection(DcMotor.Direction.FORWARD);
+		rightSlider.setDirection(DcMotor.Direction.FORWARD);
+		leftSlider.setDirection(DcMotor.Direction.REVERSE);
 
-        // Set zero power behavior to brake to prevent unwanted motion
-        rightSlider.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        leftSlider.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+		// Set zero power behavior to brake to prevent unwanted motion
+		rightSlider.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+		leftSlider.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+		arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        // Initialize drive motors
-        rightFront = hardwareMap.get(DcMotor.class, "rightFront");
-        rightBack = hardwareMap.get(DcMotor.class, "rightBack");
-        leftFront = hardwareMap.get(DcMotor.class, "leftFront");
-        leftBack = hardwareMap.get(DcMotor.class, "leftBack");
+		// Initialize drive motors
+		rightFront = hardwareMap.get(DcMotor.class, "rightFront");
+		rightBack = hardwareMap.get(DcMotor.class, "rightBack");
+		leftFront = hardwareMap.get(DcMotor.class, "leftFront");
+		leftBack = hardwareMap.get(DcMotor.class, "leftBack");
 
-        // Set zero power behavior for drive motors
-        rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+		// Set zero power behavior for drive motors
+		rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+		rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+		leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+		leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        // Set motor directions for drivetrain
-        rightFront.setDirection(DcMotor.Direction.FORWARD);
-        rightBack.setDirection(DcMotor.Direction.REVERSE);
-        leftFront.setDirection(DcMotor.Direction.REVERSE);
-        leftBack.setDirection(DcMotor.Direction.REVERSE);
 
-        // Wait for the start command from the driver
-        waitForStart();
+		// Set motor directions for drivetrain
+		rightFront.setDirection(DcMotor.Direction.REVERSE);
+		rightBack.setDirection(DcMotor.Direction.REVERSE);
+		leftFront.setDirection(DcMotor.Direction.REVERSE);
+		leftBack.setDirection(DcMotor.Direction.REVERSE);
 
-        while (opModeIsActive()) {
-            // Initialize control variables
-            float clawMainPower = gamepad1.left_trigger - gamepad1.right_trigger;
-            float sliderPower = 0;
-            float secondaryArmPosition = 0;
-            double clawSpeed = 0.05;
-            double clawServoPosition = 0;
-            double bucketposition = 0;
+		// Wait for the start command from the driver
+		waitForStart();
 
-            // Control secondary arm position with buttons
-            if (gamepad1.x) {
-                secondaryArmPosition += clawSpeed;
-            } else if (gamepad1.b) {
-                secondaryArmPosition -= clawSpeed;
-            }
-            // Ensure the position stays within valid range
-            secondaryArmPosition = Math.max(0, Math.min(1, secondaryArmPosition));
+		while (opModeIsActive()) {
+			// Initialize control variables
+			float clawMainPower = gamepad1.left_trigger - gamepad1.right_trigger;
+			float sliderPower = 0;
+			double clawSpeed = 0.2;
+			double bucketposition = 0;
 
-            // Control claw servo position with D-pad
-            if (gamepad1.dpad_left) {
-                clawServoPosition = 0.2;
-            } else if (gamepad1.dpad_right) {
-                clawServoPosition = 0.8;
-            }
+			// Control secondary arm position with buttons
+			if (gamepad1.x) {
+				secondaryArmPosition = 0.2f;
+			} else if (gamepad1.b) {
+				secondaryArmPosition = 0.8f;
+			}
+			// Ensure the position stays within valid range
+			secondaryArmPosition = Math.max(0, Math.min(1, secondaryArmPosition));
 
-            // Control slider movement with D-pad
-            if (gamepad1.dpad_down) {
-                sliderPower = -0.4f;
-            } else if (gamepad1.dpad_up) {
-                sliderPower = 0.8f;
-            } else {
-                sliderPower = 0;
-            }
+			// Control claw servo position with D-pad
+			if (gamepad1.dpad_left) {
+				clawServoPosition = 0.08;
+			} else if (gamepad1.dpad_right) {
+				clawServoPosition = 0.4;
+			}
 
-            // Adjust robot speed with gamepad buttons
-            if (gamepad1.y || gamepad2.y) {
-                speed = 0.25;
-            } else if (gamepad1.a || gamepad2.a) {
-                speed = 1;
-            }
+			// Control slider movement with D-pad
+			if (gamepad1.dpad_down) {
+				sliderPower = -0.4f;
+			} else if (gamepad1.dpad_up) {
+				sliderPower = 0.8f;
+			} else {
+				sliderPower = 0;
+			}
 
-            // Control bucket servo with Bumpers
-            if (gamepad1.left_bumper) {
-                bucketposition = 0.2;
-            } else if (gamepad1.right_bumper) {
-                bucketposition = 0.8;
-            }
+			// Adjust robot speed with gamepad buttons
+			if (gamepad1.y || gamepad2.y) {
+				speed = 0.25;
+			} else if (gamepad1.a || gamepad2.a) {
+				speed = 1;
+			}
 
-            // Initialize drivetrain power variables
-            double rightFrontPower = 0;
-            double rightBackPower = 0;
-            double leftFrontPower = 0;
-            double leftBackPower = 0;
+			// Control bucket servo with Bumpers
+			if (gamepad1.left_bumper) {
+				bucketposition = 0.2;
+			} else if (gamepad1.right_bumper) {
+				bucketposition = 0.8;
+			}
 
-            // Forward and backward movement
-            rightFrontPower += -(gamepad1.left_stick_y + gamepad2.left_stick_y) * speed;
-            rightBackPower += -(gamepad1.left_stick_y + gamepad2.left_stick_y) * speed;
-            leftFrontPower += -(gamepad1.left_stick_y + gamepad2.left_stick_y) * speed;
-            leftBackPower += -(gamepad1.left_stick_y + gamepad2.left_stick_y) * speed;
+			bucketposition = Math.max(0, Math.min(1, bucketposition));
+			clawServoPosition = Math.max(0, Math.min(1, clawServoPosition));
 
-            // Strafe movement (sideways motion)
-            rightFrontPower += -(gamepad1.left_stick_x + gamepad2.left_stick_x) * speed;
-            rightBackPower += (gamepad1.left_stick_x + gamepad2.left_stick_x) * speed;
-            leftFrontPower += (gamepad1.left_stick_x + gamepad2.left_stick_x) * speed;
-            leftBackPower += -(gamepad1.left_stick_x + gamepad2.left_stick_x) * speed;
+			// Initialize drivetrain power variables
+			double rightFrontPower = 0;
+			double rightBackPower = 0;
+			double leftFrontPower = 0;
+			double leftBackPower = 0;
 
-            // Rotation (turning)
-            rightFrontPower += -(gamepad1.right_stick_x + gamepad2.right_stick_x) * 1.5 * speed;
-            rightBackPower += -(gamepad1.right_stick_x + gamepad2.right_stick_x) * 1.5 * speed;
-            leftFrontPower += (gamepad1.right_stick_x + gamepad2.right_stick_x) * 1.5 * speed;
-            leftBackPower += (gamepad1.right_stick_x + gamepad2.right_stick_x) * 1.5 * speed;
+			// Forward and backward movement
+			rightFrontPower += -(gamepad1.left_stick_y + gamepad2.left_stick_y) * speed;
+			rightBackPower += -(gamepad1.left_stick_y + gamepad2.left_stick_y) * speed;
+			leftFrontPower += -(gamepad1.left_stick_y + gamepad2.left_stick_y) * speed;
+			leftBackPower += -(gamepad1.left_stick_y + gamepad2.left_stick_y) * speed;
 
-            // Set motor and servo powers
-            arm.setPower(clawMainPower);
-            secondaryArm.setPosition(secondaryArmPosition);
-            clawServo.setPosition(clawServoPosition);
-            bucket.setPosition(bucketposition);
-            leftSlider.setPower(sliderPower);
-            rightSlider.setPower(sliderPower);
-            rightFront.setPower(rightFrontPower);
-            rightBack.setPower(rightBackPower);
-            leftFront.setPower(leftFrontPower);
-            leftBack.setPower(leftBackPower);
+			// Strafe movement (sideways motion)
+			rightFrontPower += -(gamepad1.left_stick_x + gamepad2.left_stick_x) * speed;
+			rightBackPower += (gamepad1.left_stick_x + gamepad2.left_stick_x) * speed;
+			leftFrontPower += (gamepad1.left_stick_x + gamepad2.left_stick_x) * speed;
+			leftBackPower += -(gamepad1.left_stick_x + gamepad2.left_stick_x) * speed;
 
-            // Display telemetry data for debugging
-            telemetry.addData("Drive Speed", speed);
-            telemetry.addData("Left Stick Y", gamepad1.left_stick_y);
-            telemetry.addData("Right Stick X", gamepad1.right_stick_x);
-            telemetry.addData("Claw Servo Position", clawServoPosition);
-            telemetry.addData("Arm Power", clawMainPower);
-            telemetry.addData("Secondary Arm Power", secondaryArmPosition);
-            telemetry.update();
+			// Rotation (turning)
+			rightFrontPower += -(gamepad1.right_stick_x + gamepad2.right_stick_x) * 1.5 * speed;
+			rightBackPower += -(gamepad1.right_stick_x + gamepad2.right_stick_x) * 1.5 * speed;
+			leftFrontPower += (gamepad1.right_stick_x + gamepad2.right_stick_x) * 1.5 * speed;
+			leftBackPower += (gamepad1.right_stick_x + gamepad2.right_stick_x) * 1.5 * speed;
 
-            // Prevent CPU overuse
-            idle();
-        }
-    }
+			// Set motor and servo powers
+			arm.setPower(clawMainPower);
+			secondaryArm1.setPosition(0.4);
+			secondaryArm2.setPosition(0.4);
+			clawServo.setPosition(clawServoPosition);
+			bucket.setPosition(bucketposition);
+			leftSlider.setPower(sliderPower);
+			rightSlider.setPower(sliderPower);
+			rightFront.setPower(rightFrontPower);
+			rightBack.setPower(rightBackPower);
+			leftFront.setPower(leftFrontPower);
+			leftBack.setPower(leftBackPower);
+
+			// Display telemetry data for debugging
+			telemetry.addData("Drive Speed", speed);
+			telemetry.addData("Left Stick Y", gamepad1.left_stick_y);
+			telemetry.addData("Right Stick X", gamepad1.right_stick_x);
+			telemetry.addData("Claw Servo Position", clawServoPosition);
+			telemetry.addData("Arm Power", clawMainPower);
+			telemetry.addData("Secondary Arm Power", secondaryArmPosition);
+			telemetry.update();
+		}
+	}
 }
